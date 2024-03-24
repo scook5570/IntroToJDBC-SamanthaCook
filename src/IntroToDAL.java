@@ -58,6 +58,11 @@ public class IntroToDAL
              */
 
             Connection myConnection = getMySQLConnection(databaseName, user, password);
+            if(myConnection == null)
+            {
+                System.out.println("Failed to get a connection, cannot execute query");
+                return false;
+            }
 
             /* What are we going to execute, using our connection to the mysql
                database? Let's start with a simple query. We need to send and 
@@ -139,6 +144,11 @@ public class IntroToDAL
     public boolean TryExecutingAStoredProcedure(String databaseName, String user, String password)
     {
         Connection myConnection = getMySQLConnection(databaseName, user, password);
+        if(myConnection == null)
+        {
+            System.out.println("Failed to get a connection, cannot execute stored procedure");
+            return false;
+        }
         try
         {
             CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call GetRecipes()}");
@@ -163,6 +173,11 @@ public class IntroToDAL
     public boolean TryExecutingAStoredProcedureWithParam(String databaseName, String user, String password, String recipeName, String CookbookName, int numServings, boolean isBook, String website)
     {
         Connection myConnection = getMySQLConnection(databaseName, user, password);
+        if(myConnection == null)
+        {
+            System.out.println("Failed to obstain a valid connection. Stored procedure could not be run");
+            return false;
+        }
         try
         {
             CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call InsertNewRecipe(?, ?, ?, ?, ?)}");
