@@ -1,3 +1,4 @@
+
 import static org.junit.Assert.assertFalse;
 
 import org.junit.AfterClass;
@@ -7,7 +8,6 @@ import org.junit.Test;
 public class IntroToDALTest {
 
     private static IntroToDAL dal;
-
 
     @BeforeClass
     public static void Setup()
