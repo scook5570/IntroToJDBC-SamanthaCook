@@ -99,7 +99,8 @@ public class IntroToDAL
                 
                 // But, really you should add an instance of the object to the array of objects
             }
-        } /* When working with a database, exceptions can happen. There are lots
+        } 
+        /* When working with a database, exceptions can happen. There are lots
            of specific exceptions we could look for, I'm just catching the 
            general purpose one. But think about some of the things that could
            go wrong in our method:
@@ -158,4 +159,25 @@ public class IntroToDAL
         }
         return true;
     }
+
+    public boolean TryExecutingAStoredProcedureWithParam(String databaseName, String user, String password, String recipeName, String CookbookName, int numServings, boolean isBook, String website)
+    {
+        Connection myConnection = getMySQLConnection(databaseName, user, password);
+        try
+        {
+            CallableStatement myStoredProcedureCall = myConnection.prepareCall("{Call InsertNewRecipe(?, ?, ?, ?, ?)}");
+            myStoredProcedureCall.setString(1, recipeName);
+            myStoredProcedureCall.setString(2,CookbookName);
+            myStoredProcedureCall.setInt(3, numServings);
+            myStoredProcedureCall.setBoolean(4, isBook);
+            myStoredProcedureCall.setString(5, website);
+            myStoredProcedureCall.executeQuery();
+        } catch (SQLException myException)
+        {
+            System.out.println("Failed to execute stored procedure:" + myException.getMessage());
+            return false;
+        }
+        return true;
+    }
+
 }

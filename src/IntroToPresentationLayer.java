@@ -47,5 +47,14 @@ public class IntroToPresentationLayer
         {
             System.out.println("Failed to run a stored procedure");
         }
+
+        if(dal.TryExecutingAStoredProcedureWithParam("MealPlanning", userName, password, "Maple Chicken", "Dude Diet", 4, true, "www.dudediet.com"))
+        {
+            System.out.println("Success ran stored procedure with params");
+        }
+        else
+        {
+            System.out.println("Failed to run stored procedure with params");
+        }
     }  
 }
