@@ -10,7 +10,7 @@ public class IntroToDAL
 {
     // Notice that the databaseName, user and password are passed into this method. We are in the DAL,
     // and we cannot prompt the user for this information. That should be done in the presentation layer
-    private Connection getMySQLConnection(String databaseName, String user, String password)
+    Connection getMySQLConnection(String databaseName, String user, String password)
     {
         try
         {

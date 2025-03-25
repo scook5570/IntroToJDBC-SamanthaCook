@@ -16,3 +16,10 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+## Lab Content
+- Samantha Cook
+- https://github.com/scook5570
+- openjdk 21.0.5 2024-10-15 LTS
+- MySQL 8.0
+- JDBC 4.2
