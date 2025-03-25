@@ -39,8 +39,31 @@ public class IntroToPresentationLayer {
             System.out.println("Failed to connect to the MealPlanning database");
         }
 
-        // Let's try calling a stored procedure, and let's start simple.
-        // I made a new stored procedure that just returns everything in the
-        // Recipe table, called GetRecipes. No parameters, just a simple call.
+        ArcadeGamesProvider arcadeGamesProvider = new ArcadeGamesProvider(
+                dataMgr.getArcadeGamesConnection(userName, password));
+
+        if (arcadeGamesProvider.isConnected()) {
+            System.out.println("Successfully connected to the ArcadeGames database");
+
+            List<String> games = arcadeGamesProvider.getGames();
+            System.out.println("All Games:");
+            for (String game : games) {
+                System.out.println(game);
+            }
+
+            List<String> gamesByDeveloper = arcadeGamesProvider.getGamesByDeveloper("Some Developer");
+            System.out.println("Games by Developer:");
+            for (String game : gamesByDeveloper) {
+                System.out.println(game);
+            }
+
+            List<String> gamesByReleaseYear = arcadeGamesProvider.getGamesByReleaseYear(2020);
+            System.out.println("Games Released in 2020:");
+            for (String game : gamesByReleaseYear) {
+                System.out.println(game);
+            }
+        } else {
+            System.out.println("Failed to connect to the ArcadeGames database");
+        }
     }
 }
