@@ -1,12 +1,3 @@
-// Author:  Wendy-Beth Minton
-// Class:   3810 Database
-// Lab:     Introduction to Database Connectivity
-
-// This is an example of a presentation layer. Notice it includes all the needed prompts needed.
-// This class also happens to have the main method. It is common to have the entry to a program 
-// exist in the presentation layer, and actually each application tends to have its own entry point,
-// if the program/product has multiple applications. 
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,20 +5,49 @@ public class IntroToPresentationLayer {
     public static void main(String[] args) {
         Scanner userInformation = new Scanner(System.in);
         System.out.println("Enter username and password:");
-        // String input
         String userName = userInformation.nextLine();
         String password = userInformation.nextLine();
 
-        // Let's start simple. How do we connect to and access a database?
-        // Well, the presentation layer can't do it. We need an instance of the DAL!
         DataMgr dataMgr = new DataMgr();
         MealPlanningProvider mealPlanningProvider = new MealPlanningProvider(
                 dataMgr.getMealPlanningConnection(userName, password));
+        ArcadeGamesProvider arcadeGamesProvider = new ArcadeGamesProvider(
+                dataMgr.getArcadeGamesConnection(userName, password));
 
-        // Now we can use the dal object, so let's print
-        // out some rows from the Meal table, in the MealPlanningDatabase.
-        // We need to pass the dal method everything it needs to run a query, including
-        // the database name, the query, and the user's sql credentials.
+        while (true) {
+            System.out.println("Options:");
+            System.out.println("1. Run GetRecipes stored procedure against the MealPlanning database");
+            System.out.println("2. Run method that returns the results of a statement (ArcadeGames)");
+            System.out.println("3. Run method that returns the results of a prepared statement (ArcadeGames)");
+            System.out.println("4. Run method that returns the results of a callable statement (ArcadeGames)");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = userInformation.nextInt();
+            userInformation.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    runGetRecipesStoredProcedure(mealPlanningProvider);
+                    break;
+                case 2:
+                    runStatementMethod(arcadeGamesProvider);
+                    break;
+                case 3:
+                    runPreparedStatementMethod(arcadeGamesProvider, userInformation);
+                    break;
+                case 4:
+                    runCallableStatementMethod(arcadeGamesProvider, userInformation);
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void runGetRecipesStoredProcedure(MealPlanningProvider mealPlanningProvider) {
         if (mealPlanningProvider.isConnected()) {
             System.out.println("Successfully connected to the MealPlanning database");
 
@@ -38,10 +58,9 @@ public class IntroToPresentationLayer {
         } else {
             System.out.println("Failed to connect to the MealPlanning database");
         }
+    }
 
-        ArcadeGamesProvider arcadeGamesProvider = new ArcadeGamesProvider(
-                dataMgr.getArcadeGamesConnection(userName, password));
-
+    private static void runStatementMethod(ArcadeGamesProvider arcadeGamesProvider) {
         if (arcadeGamesProvider.isConnected()) {
             System.out.println("Successfully connected to the ArcadeGames database");
 
@@ -50,15 +69,34 @@ public class IntroToPresentationLayer {
             for (String game : games) {
                 System.out.println(game);
             }
+        } else {
+            System.out.println("Failed to connect to the ArcadeGames database");
+        }
+    }
 
-            List<String> gamesByDeveloper = arcadeGamesProvider.getGamesByDeveloper("Some Developer");
+    private static void runPreparedStatementMethod(ArcadeGamesProvider arcadeGamesProvider, Scanner userInformation) {
+        if (arcadeGamesProvider.isConnected()) {
+            System.out.println("Enter developer name:");
+            String developerName = userInformation.nextLine();
+
+            List<String> gamesByDeveloper = arcadeGamesProvider.getGamesByDeveloper(developerName);
             System.out.println("Games by Developer:");
             for (String game : gamesByDeveloper) {
                 System.out.println(game);
             }
+        } else {
+            System.out.println("Failed to connect to the ArcadeGames database");
+        }
+    }
 
-            List<String> gamesByReleaseYear = arcadeGamesProvider.getGamesByReleaseYear(2020);
-            System.out.println("Games Released in 2020:");
+    private static void runCallableStatementMethod(ArcadeGamesProvider arcadeGamesProvider, Scanner userInformation) {
+        if (arcadeGamesProvider.isConnected()) {
+            System.out.println("Enter release year:");
+            int releaseYear = userInformation.nextInt();
+            userInformation.nextLine(); // Consume newline
+
+            List<String> gamesByReleaseYear = arcadeGamesProvider.getGamesByReleaseYear(releaseYear);
+            System.out.println("Games Released in " + releaseYear + ":");
             for (String game : gamesByReleaseYear) {
                 System.out.println(game);
             }
